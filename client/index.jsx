@@ -1,9 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import students from '../cohort-data/hrnyc20';
-import NameItem from './nameItem.jsx';
-import randomize from './../randomizer.js';
-import axios from 'axios';
+import students from "../cohort-data/hrnyc21";
+import NameItem from "./nameItem.jsx";
+import ClassList from "./classList.jsx";
+import RandomClassList from "./randomClassList.jsx";
+import Winner from "./winner.jsx";
+import randomize from "./../randomizer.js";
+import axios from "axios";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 class App extends React.Component {
   constructor(props) {
@@ -12,29 +16,37 @@ class App extends React.Component {
     this.state = {
       studentList: students,
       randomizedStudents: null,
-      itemToAdd: '',
+      itemToAdd: "",
       currentNumber: 1,
-      showNames: true,
       showNormal: true,
+      showBlock: true,
       showWinner: false,
+      randomized: false,
       winner: null,
-      nextDay: 'Tuesday, 02/26/19'
+      nextDay: "Tuesday, 02/26/19"
     };
-    
+
     this.handleNumberChange = this.handleNumberChange.bind(this);
     this.randomizeClass = this.randomizeClass.bind(this);
     this.handleWinner = this.handleWinner.bind(this);
     this.saveWinnerToSpreadsheet = this.saveWinnerToSpreadsheet.bind(this);
+    this.showWinner = this.showWinner.bind(this);
   }
-  
+
   randomizeClass() {
-    var orderedStudents = this.state.studentList;
-    console.log(orderedStudents);
-    var randomized = randomize(orderedStudents);
     this.setState({
-      showNormal: false,
-      randomizedStudents: randomized
-    })
+      showBlock: false
+    });
+    var orderedStudents = this.state.studentList;
+
+    setTimeout(() => {
+      this.setState({
+        showNormal: false,
+        showBlock: true,
+        randomized: true,
+        randomizedStudents: randomize(orderedStudents)
+      });
+    }, 1200);
   }
 
   handleNumberChange(e) {
@@ -43,92 +55,81 @@ class App extends React.Component {
     console.log("Number Selection", newNumber);
     this.setState({
       currentNumber: parseInt(newNumber)
-    })
+    });
   }
 
   saveWinnerToSpreadsheet(winner) {
-    console.log('save winner to sp called', winner);
-    axios.post('/sp', {
+    console.log("save winner to sp called", winner);
+    axios.post("/sp", {
       winner: winner
     });
   }
 
+  showWinner() {
+    this.setState({
+      showWinner: true
+    });
+  }
+
   handleWinner(ind, name) {
-    if (ind + 1 === this.state.currentNumber) {
-      console.log('winner is', name)
-      this.setState({
-        showWinner: true,
-        winner: name
-      }, () => {
-        this.saveWinnerToSpreadsheet(this.state.winner);
-      });
+    if (this.state.randomized) {
+      console.log("winner is", name);
+      this.setState(
+        {
+          winner: name
+        },
+        () => {
+          // this.saveWinnerToSpreadsheet(this.state.winner);
+        }
+      );
+      setTimeout(() => {
+        this.showWinner();
+      }, 750);
     }
   }
 
   render() {
+    // let copy = this.state.studentList.slice();
+    // let randomList = randomize(copy);
 
-    let copy = this.state.studentList.slice();
-    let randomList = randomize(copy);
-
-    if (this.state.showWinner) {
-      return (
-        <div style={{fontSize:"100px"}}>
-          PRESENTER IS {this.state.winner} ON {this.state.nextDay}
-        </div>
-      )
-    }
+    // if (this.state.showWinner) {
+    //   return (
+    //     <div>
+    //       PRESENTER IS {this.state.winner} ON {this.state.nextDay}
+    //     </div>
+    //   );
+    // }
     return (
-      <div style={{textAlign: 'center', margin: '25px'}}>
-        <h1>Random Picker</h1>
-        <div className="mainBody" style={{display: 'inline-block'}}>
-
-          <div className="pickNumber">  
+      <div className="container">
+        <h1 className="title">Random Student Picker</h1>
+        {/* <div className="pickNumber">
             <select value={this.state.value} onChange={this.handleNumberChange}>
               {students.map((name, ind) => {
-                return (
-                  <option value={ind + 1}>{ind + 1}</option>
-                )
+                return <option value={ind + 1}>{ind + 1}</option>;
               })}
-            </select>
-            <button className="add" onClick={this.randomizeClass}>Randomize Class</button>
-          </div>
+            </select> */}
+        <Winner
+          showWinner={this.state.showWinner}
+          winner={this.state.winner}
+          nextDay={this.state.nextDay}
+        />
 
-          <div className="container" style={{width: '250px', padding:'30px', fontSize: '20px', fontStyle: 'Helvetica'}}>
-            <div style={{float:'left'}}>
-              <div className="numbersList">
-                {students.map((randItem, ind) => {
-                  return (
-                    <div key={ind} style={this.state.currentNumber === (ind + 1) ? {color: 'blue'} : {color:'red'}}>
-                        {ind+1}
-                      </div>
-                    )
-                  })}
-              </div>
-            </div>
-            
-            {this.state.showNormal ? 
-              <div className="normalNames" style={{float:'right'}}>
-                {!this.state.showNames ? null : 
-                students.map((randItem, ind) => {
-                  return (
-                    <div>{randItem}</div>
-                  )
-                })}
-              </div>
-              :
-
-              <div className="randomizedNames" style={{float:'right'}}>
-                {!this.state.showNames ? null : 
-                randomList.map((randItem, ind) => {
-                  return (
-                    <NameItem handleWinner={this.handleWinner} keyInd={ind} item={randItem} wait={1000 * ind} />
-                    )
-                  })}
-              </div>
-            }   
-
-          </div>
-        </div>
+        {this.state.showNormal ? (
+          <ClassList
+            showBlock={this.state.showBlock}
+            students={this.state.studentList}
+            handleWinner={this.handleWinner}
+          />
+        ) : (
+          <RandomClassList
+            showBlock={this.state.showBlock}
+            students={this.state.randomizedStudents}
+            handleWinner={this.handleWinner}
+          />
+        )}
+        <button className="button" onClick={this.randomizeClass}>
+          Randomize Class
+        </button>
       </div>
     );
   }
