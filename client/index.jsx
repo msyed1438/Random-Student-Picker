@@ -5,6 +5,7 @@ import NameItem from "./nameItem.jsx";
 import ClassList from "./classList.jsx";
 import RandomClassList from "./randomClassList.jsx";
 import Winner from "./winner.jsx";
+import Settings from "./settings.jsx";
 import randomize from "./../randomizer.js";
 import axios from "axios";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -21,6 +22,7 @@ class App extends React.Component {
       showNormal: true,
       showBlock: true,
       showWinner: false,
+      showSettings: false,
       randomized: false,
       winner: null,
       nextDay: "Tuesday, 02/26/19"
@@ -31,6 +33,7 @@ class App extends React.Component {
     this.handleWinner = this.handleWinner.bind(this);
     this.saveWinnerToSpreadsheet = this.saveWinnerToSpreadsheet.bind(this);
     this.showWinner = this.showWinner.bind(this);
+    this.toggleSettings = this.toggleSettings.bind(this);
   }
 
   randomizeClass() {
@@ -71,6 +74,12 @@ class App extends React.Component {
     });
   }
 
+  toggleSettings() {
+    this.setState({
+      showSettings: !this.state.showSettings
+    });
+  }
+
   handleWinner(ind, name) {
     if (this.state.randomized) {
       console.log("winner is", name);
@@ -101,6 +110,9 @@ class App extends React.Component {
     // }
     return (
       <div className="container">
+        <button className="settings-button" onClick={this.toggleSettings}>
+          S
+        </button>
         <h1 className="title">Random Student Picker</h1>
         {/* <div className="pickNumber">
             <select value={this.state.value} onChange={this.handleNumberChange}>
@@ -112,6 +124,11 @@ class App extends React.Component {
           showWinner={this.state.showWinner}
           winner={this.state.winner}
           nextDay={this.state.nextDay}
+        />
+
+        <Settings
+          showSettings={this.state.showSettings}
+          studentList={this.state.studentList}
         />
 
         {this.state.showNormal ? (

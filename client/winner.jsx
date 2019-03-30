@@ -11,10 +11,10 @@ class Winner extends React.Component {
     return this.props.showWinner
       ? ReactDOM.createPortal(
           <div className="winner-modal">
-            <div className="winner-message">The presentation on</div>
-            <div className="winner-date">{this.props.nextDay}</div>
-            <div className="winner-message">will be</div>
+            <div className="winner-message">The presentator will be</div>
             <div className="winner-name">{this.props.winner}</div>
+            <div className="winner-message">on</div>
+            <div className="winner-date">{this.props.nextDay}</div>
           </div>,
           document.getElementById("app")
         )

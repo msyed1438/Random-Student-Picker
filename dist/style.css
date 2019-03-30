@@ -60,6 +60,50 @@ button:focus {
   justify-content: center;
   align-items: center;
 }
+
+.settings-button {
+  align-self: flex-end;
+}
+
+.settings-modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: rgba(93, 90, 85, 0.5);
+  color: white;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.settings-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(93, 90, 85, 1);
+  opacity: 1 !important;
+  width: 400px;
+  height: auto;
+  border-radius: 25px;
+  box-shadow: 10px 10px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.student-selector {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: larger;
+}
+.student-selector > * {
+  padding: 5px;
+  font-size: large;
+}
+
 .names {
   display: flex;
   flex-direction: row;
@@ -121,10 +165,10 @@ button:focus {
 }
 
 .winner-date {
-  font-size: 2.2em;
+  font-size: 3em;
   padding: 15px;
   color: #ffffff;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  /* text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black; */
 }
 
 .winner-name {
