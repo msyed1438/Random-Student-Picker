@@ -10,6 +10,7 @@ class Settings extends React.Component {
       this.state[student] = true;
     });
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleInputChange(event) {
@@ -22,11 +23,21 @@ class Settings extends React.Component {
     });
   }
 
+  handleClick() {
+    let studentList = [];
+    for (let student in this.state) {
+      if (this.state[student]) studentList.push(student);
+    }
+    this.props.adjustStudentList(studentList);
+    this.props.toggleSettings();
+  }
+
   render() {
     return this.props.showSettings
       ? ReactDOM.createPortal(
           <div className="settings-modal">
             <div className="settings-window">
+              <button onClick={this.handleClick}>x</button>
               <form className="student-selector">
                 {this.props.studentList.map(student => {
                   return (

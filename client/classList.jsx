@@ -17,9 +17,9 @@ class ClassList extends React.Component {
         {this.props.students.map((randItem, ind) => {
           return (
             <NameItem
+              key={ind}
               className="name-item"
               handleWinner={this.props.handleWinner}
-              keyInd={ind}
               item={randItem}
               wait={300 * ind}
               showBlock={this.props.showBlock}

@@ -19,7 +19,7 @@ class RandomClassList extends React.Component {
             <NameItem
               className="name-item"
               handleWinner={this.props.handleWinner}
-              keyInd={ind}
+              key={ind}
               item={randItem}
               wait={300 * ind}
               showBlock={this.props.showBlock}

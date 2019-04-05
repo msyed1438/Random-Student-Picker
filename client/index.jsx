@@ -16,6 +16,7 @@ class App extends React.Component {
 
     this.state = {
       studentList: students,
+      adjustedStudentList: students,
       randomizedStudents: null,
       itemToAdd: "",
       currentNumber: 1,
@@ -25,6 +26,7 @@ class App extends React.Component {
       showSettings: false,
       randomized: false,
       winner: null,
+      listKey: 0,
       nextDay: "Tuesday, 02/26/19"
     };
 
@@ -34,13 +36,15 @@ class App extends React.Component {
     this.saveWinnerToSpreadsheet = this.saveWinnerToSpreadsheet.bind(this);
     this.showWinner = this.showWinner.bind(this);
     this.toggleSettings = this.toggleSettings.bind(this);
+    this.adjustStudentList = this.adjustStudentList.bind(this);
+    this.resetCups = this.resetCups.bind(this);
   }
 
   randomizeClass() {
     this.setState({
       showBlock: false
     });
-    var orderedStudents = this.state.studentList;
+    var orderedStudents = this.state.adjustedStudentList;
 
     setTimeout(() => {
       this.setState({
@@ -68,15 +72,31 @@ class App extends React.Component {
     });
   }
 
-  showWinner() {
-    this.setState({
-      showWinner: true
-    });
-  }
-
   toggleSettings() {
     this.setState({
       showSettings: !this.state.showSettings
+    });
+  }
+
+  adjustStudentList(studentList) {
+    this.setState({
+      adjustedStudentList: studentList,
+      listKey: this.state.listKey + 1
+    });
+    this.resetCups();
+  }
+
+  resetCups() {
+    this.setState({
+      showNormal: true,
+      showBlock: true,
+      randomized: false
+    });
+  }
+
+  showWinner() {
+    this.setState({
+      showWinner: true
     });
   }
 
@@ -129,16 +149,20 @@ class App extends React.Component {
         <Settings
           showSettings={this.state.showSettings}
           studentList={this.state.studentList}
+          adjustStudentList={this.adjustStudentList}
+          toggleSettings={this.toggleSettings}
         />
 
         {this.state.showNormal ? (
           <ClassList
+            key={this.state.listKey}
             showBlock={this.state.showBlock}
-            students={this.state.studentList}
+            students={this.state.adjustedStudentList}
             handleWinner={this.handleWinner}
           />
         ) : (
           <RandomClassList
+            key={this.state.listKey}
             showBlock={this.state.showBlock}
             students={this.state.randomizedStudents}
             handleWinner={this.handleWinner}

@@ -19,7 +19,7 @@ class NameItem extends React.Component {
       this.setState({
         showCup: true
       });
-      console.log("key:", this.props.keyInd);
+      console.log("key:", this.props.key);
       // this.props.handleWinner(this.props.keyInd, this.props.item);
     }, this.props.wait);
   }
@@ -30,12 +30,12 @@ class NameItem extends React.Component {
         reveal: true,
         showName: true
       },
-      this.props.handleWinner(this.props.keyInd, this.props.item)
+      this.props.handleWinner(this.props.key, this.props.item)
     );
   }
 
   render() {
-    console.log("key in render:", this.props.keyInd);
+    console.log("key in render:", this.props.key);
 
     if (!this.state.showCup)
       return (
