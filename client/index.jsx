@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import students from "../cohort-data/hrnyc21";
+import students from "../cohort-data/avengers";
 import NameItem from "./nameItem.jsx";
 import ClassList from "./classList.jsx";
 import RandomClassList from "./randomClassList.jsx";
