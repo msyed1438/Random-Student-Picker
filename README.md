@@ -1,6 +1,8 @@
 # Random Student Picker
 This repo builds upon kapolyak/Random-Student-Picker. Added functionality includes a "Hat Shuffle" inspired UI with CSS animations, in app settings modal for simpler adjustment to the class list, and improved winner modal implemented with React Portal. 
 
+### [Live Demo](https://random-student-picker.herokuapp.com/)
+
 ![](https://github.com/stephenjmark/Random-Student-Picker/blob/master/studentpicker.gif)
 
 ## Usage
